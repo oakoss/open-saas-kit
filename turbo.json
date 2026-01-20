@@ -27,8 +27,14 @@
       "dependsOn": ["^build"],
       "outputs": ["node_modules/.cache/eslint/**"]
     },
+    "//#lint:root": {
+      "outputs": ["node_modules/.cache/eslint/**"]
+    },
     "lint:fix": {
       "dependsOn": ["^build"],
+      "cache": false
+    },
+    "//#lint:fix:root": {
       "cache": false
     },
     "test": {

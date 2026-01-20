@@ -12,10 +12,12 @@
     "format": "prettier -uwl --cache .",
     "format:check": "prettier -uc --cache .",
     "postinstall": "pnpm run lint:ws",
-    "lint": "turbo run lint && eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
-    "lint:fix": "turbo run lint:fix && eslint . --max-warnings 0 --fix --cache --cache-location node_modules/.cache/eslint/.eslintcache",
+    "lint": "turbo run lint //#lint:root",
+    "lint:fix": "turbo run lint:fix //#lint:fix:root",
+    "lint:fix:root": "eslint . --max-warnings 0 --fix --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "lint:md": "markdownlint-cli2 '**/*.md'",
     "lint:md:fix": "markdownlint-cli2 --fix '**/*.md'",
+    "lint:root": "eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "lint:ws": "sherif",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
@@ -34,7 +36,7 @@
     "lefthook": "^2.0.15",
     "markdownlint-cli2": "^0.20.0",
     "prettier": "^3.8.0",
-    "prettier-plugin-packagejson": "^2.5.22",
+    "prettier-plugin-packagejson": "^3.0.0",
     "sherif": "^1.10.0",
     "turbo": "^2.7.5",
     "typescript": "^5.9.3"
