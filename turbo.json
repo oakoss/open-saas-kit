@@ -2,14 +2,15 @@
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
   "globalEnv": [
-    "APP_URL",
     "DATABASE_URL",
     "GITHUB_CLIENT_ID",
     "GITHUB_CLIENT_SECRET",
     "GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET",
     "NODE_ENV",
-    "SESSION_SECRET"
+    "SESSION_SECRET",
+    "SKIP_ENV_VALIDATION",
+    "VITE_APP_URL"
   ],
   "tasks": {
     "build": {

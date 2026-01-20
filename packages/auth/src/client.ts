@@ -1,9 +1,10 @@
+import { env } from '@oakoss/config/env';
 import { createAuthClient } from 'better-auth/react';
 
 export const authClient = createAuthClient({
   baseURL:
     globalThis.window === undefined
-      ? process.env.APP_URL
+      ? env.VITE_APP_URL
       : globalThis.location.origin,
 });
 
