@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 
+import optimizeLocales from '@react-aria/optimize-locales-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
@@ -15,6 +16,12 @@ const config = defineConfig({
     },
   },
   plugins: [
+    {
+      ...optimizeLocales.vite({
+        locales: ['en-US'],
+      }),
+      enforce: 'pre',
+    },
     devtools(),
     nitro(),
     // this is the plugin that enables path aliases
