@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+
+# Lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build outputs
+build
+dist
+out
+
+# Framework - TanStack/Vinxi/Nitro
+.nitro
+.output
+.tanstack
+.vinxi
+.wrangler
+
+# Framework - Turbo
+.turbo
+
+# Testing
+coverage
+
+# Generated files
+*.gen.ts
+
+# Logs
+*.log

@@ -1,0 +1,11 @@
+{
+  "extends": "@oakoss/typescript-config/react.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["vite/client"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

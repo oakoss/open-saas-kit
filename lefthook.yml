@@ -1,0 +1,60 @@
+# lefthook.yml
+output:
+  - failure # Only show failed steps
+  - execution_out # Show command output for failures
+
+pre-commit:
+  parallel: true
+  commands:
+    typecheck:
+      glob: '*.{ts,tsx}'
+      run: pnpm typecheck
+    lint:
+      glob: '*.{ts,tsx,js,jsx,cjs,mjs}'
+      run: pnpm lint:fix
+      stage_fixed: true
+    lint-md:
+      glob: '*.md'
+      run: pnpm markdownlint-cli2 --fix {staged_files}
+      stage_fixed: true # Auto-stage Markdown fixes!
+    format:
+      glob: '*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx}'
+      run: pnpm prettier -uwl {staged_files}
+      stage_fixed: true # Auto-stage Prettier fixes!
+    beads-flush:
+      run: bd hooks run pre-commit
+      skip:
+        - run: '[ ! -d .beads ]' # Skip if no .beads directory
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm dlx commitlint --edit "$1"
+
+prepare-commit-msg:
+  commands:
+    beads-trailers:
+      run: bd hooks run prepare-commit-msg {1} {2} {3}
+      skip:
+        - run: '[ ! -d .beads ]'
+
+post-merge:
+  commands:
+    beads-import:
+      run: bd hooks run post-merge
+      skip:
+        - run: '[ ! -d .beads ]'
+
+post-checkout:
+  commands:
+    beads-import:
+      run: bd hooks run post-checkout {1} {2} {3}
+      skip:
+        - run: '[ ! -d .beads ]'
+
+pre-push:
+  commands:
+    beads-stale-check:
+      run: bd hooks run pre-push
+      skip:
+        - run: '[ ! -d .beads ]'

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "ui": "tui",
+  "globalEnv": [
+    "APP_URL",
+    "DATABASE_URL",
+    "GITHUB_CLIENT_ID",
+    "GITHUB_CLIENT_SECRET",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "NODE_ENV",
+    "SESSION_SECRET"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".vinxi/**", ".output/**", "dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "outputs": ["node_modules/.cache/eslint/**"]
+    },
+    "lint:fix": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": ["node_modules/.cache/typescript/**"]
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}
