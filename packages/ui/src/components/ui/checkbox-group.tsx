@@ -5,7 +5,7 @@ import {
   type CheckboxGroupProps as CheckboxGroupPrimitiveProps,
 } from 'react-aria-components';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 function CheckboxGroup({ className, ...props }: CheckboxGroupPrimitiveProps) {
   return (

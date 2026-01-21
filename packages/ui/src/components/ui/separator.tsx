@@ -1,14 +1,17 @@
 'use client';
 
-import { Separator as SeparatorPrimitive } from '@base-ui/react/separator';
+import {
+  Separator as SeparatorPrimitive,
+  type SeparatorProps,
+} from 'react-aria-components';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 function Separator({
   className,
   orientation = 'horizontal',
   ...props
-}: SeparatorPrimitive.Props) {
+}: SeparatorProps) {
   return (
     <SeparatorPrimitive
       className={cn(

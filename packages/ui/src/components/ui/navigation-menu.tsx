@@ -2,7 +2,7 @@ import { NavigationMenu as NavigationMenuPrimitive } from '@base-ui/react/naviga
 import { RiArrowDownSLine } from '@remixicon/react';
 import { cva } from 'class-variance-authority';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 function NavigationMenu({
   className,

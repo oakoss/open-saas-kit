@@ -1,15 +1,25 @@
-import { mergeProps } from '@base-ui/react/merge-props';
-import { useRender } from '@base-ui/react/use-render';
+'use client';
+
 import { RiArrowRightSLine, RiMoreLine } from '@remixicon/react';
 import * as React from 'react';
+import {
+  Breadcrumb as BreadcrumbPrimitive,
+  type BreadcrumbProps,
+  Breadcrumbs as BreadcrumbsPrimitive,
+  type BreadcrumbsProps,
+  Link,
+  type LinkProps,
+} from 'react-aria-components';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
-function Breadcrumb({ className, ...props }: React.ComponentProps<'nav'>) {
+function Breadcrumb({ className, ...props }: BreadcrumbsProps<object>) {
   return (
-    <nav
-      aria-label="breadcrumb"
-      className={cn(className)}
+    <BreadcrumbsPrimitive
+      className={cn(
+        'text-muted-foreground gap-1.5 text-sm flex flex-wrap items-center wrap-break-word',
+        className,
+      )}
       data-slot="breadcrumb"
       {...props}
     />
@@ -29,9 +39,9 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
   );
 }
 
-function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
+function BreadcrumbItem({ className, ...props }: BreadcrumbProps) {
   return (
-    <li
+    <BreadcrumbPrimitive
       className={cn('gap-1 inline-flex items-center', className)}
       data-slot="breadcrumb-item"
       {...props}
@@ -39,24 +49,14 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
   );
 }
 
-function BreadcrumbLink({
-  className,
-  render,
-  ...props
-}: useRender.ComponentProps<'a'>) {
-  return useRender({
-    defaultTagName: 'a',
-    props: mergeProps<'a'>(
-      {
-        className: cn('hover:text-foreground transition-colors', className),
-      },
-      props,
-    ),
-    render,
-    state: {
-      slot: 'breadcrumb-link',
-    },
-  });
+function BreadcrumbLink({ className, ...props }: LinkProps) {
+  return (
+    <Link
+      className={cn('hover:text-foreground transition-colors', className)}
+      data-slot="breadcrumb-link"
+      {...props}
+    />
+  );
 }
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {

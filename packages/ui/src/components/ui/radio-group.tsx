@@ -9,7 +9,7 @@ import {
   type RadioProps as RadioPrimitiveProps,
 } from 'react-aria-components';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 function RadioGroup({ className, ...props }: RadioGroupPrimitiveProps) {
   return (

@@ -5,5 +5,9 @@
     "rootDir": "src"
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.lint.json" }]
+  "references": [
+    {
+      "path": "./tsconfig.lint.json"
+    }
+  ]
 }

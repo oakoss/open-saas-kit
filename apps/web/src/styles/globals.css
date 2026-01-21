@@ -1,1 +1,7 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
 @import '@oakoss/ui/theme.css';
+
+@theme inline {
+  --font-sans: 'Inter Variable', sans-serif;
+}

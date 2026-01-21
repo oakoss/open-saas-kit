@@ -10,8 +10,8 @@ export function RACProvider({ children }: { children: React.ReactNode }) {
   return (
     <I18nProvider locale="en-US">
       <RACRouterProvider
-        navigate={(href, opts) => router.navigate({ ...href, ...opts })}
-        useHref={(href) => router.buildLocation(href).href}
+        navigate={(href) => router.navigate({ to: href as string })}
+        useHref={(href) => router.buildLocation({ to: href as string }).href}
       >
         {children}
       </RACRouterProvider>

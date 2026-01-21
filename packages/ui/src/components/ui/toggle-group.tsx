@@ -7,8 +7,8 @@ import {
   type ToggleButtonProps as ToggleButtonPrimitiveProps,
 } from 'react-aria-components';
 
-import { toggleVariants } from '@/components/ui/toggle';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
+import { toggleVariants } from './toggle';
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants> & {
