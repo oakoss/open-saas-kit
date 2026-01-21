@@ -2,14 +2,13 @@
 
 import { RiCircleLine } from '@remixicon/react';
 import {
-  composeRenderProps,
   Radio as RadioPrimitive,
   RadioGroup as RadioGroupPrimitive,
   type RadioGroupProps as RadioGroupPrimitiveProps,
   type RadioProps as RadioPrimitiveProps,
 } from 'react-aria-components';
 
-import { cn } from '../../lib/utils';
+import { cn, cx } from '../../lib/utils';
 
 function RadioGroup({ className, ...props }: RadioGroupPrimitiveProps) {
   return (
@@ -31,19 +30,22 @@ function RadioGroupItem({ className, ...props }: RadioPrimitiveProps) {
       data-slot="radio-group-item"
       {...props}
     >
-      {composeRenderProps(props.children, (children, { isSelected }) => (
-        <>
-          {isSelected && (
-            <div
-              className="group-aria-invalid/radio-group-item:text-destructive text-primary flex size-4 items-center justify-center"
-              data-slot="radio-group-indicator"
-            >
-              <RiCircleLine className="absolute left-1/2 top-1/2 size-2 -translate-1/2 fill-current" />
-            </div>
-          )}
-          {children}
-        </>
-      ))}
+      {cx(
+        ({ isSelected }, children) => (
+          <>
+            {isSelected && (
+              <div
+                className="group-aria-invalid/radio-group-item:text-destructive text-primary flex size-4 items-center justify-center"
+                data-slot="radio-group-indicator"
+              >
+                <RiCircleLine className="absolute left-1/2 top-1/2 size-2 -translate-1/2 fill-current" />
+              </div>
+            )}
+            {children}
+          </>
+        ),
+        props.children,
+      )}
     </RadioPrimitive>
   );
 }

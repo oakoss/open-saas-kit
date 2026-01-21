@@ -1,68 +1,102 @@
-import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
+'use client';
 
-import { cn } from '../../lib/utils';
+import {
+  Button,
+  OverlayArrow,
+  Tooltip as TooltipPrimitive,
+  type TooltipProps as TooltipPrimitiveProps,
+  TooltipTrigger as TooltipTriggerPrimitive,
+  type TooltipTriggerComponentProps,
+} from 'react-aria-components';
+import { tv, type VariantProps } from 'tailwind-variants';
 
-function TooltipProvider({
-  delay = 0,
-  ...props
-}: TooltipPrimitive.Provider.Props) {
+import { cx } from '../../lib/utils';
+
+export const tooltipVariants = tv({
+  base: [
+    'rounded-md px-3 py-1.5 text-xs',
+    'bg-foreground text-background',
+    'z-50 w-fit max-w-xs',
+    'will-change-transform',
+  ],
+  variants: {
+    isEntering: {
+      true: [
+        'animate-in fade-in-0 zoom-in-95',
+        'placement-bottom:slide-in-from-top-2',
+        'placement-left:slide-in-from-right-2',
+        'placement-right:slide-in-from-left-2',
+        'placement-top:slide-in-from-bottom-2',
+      ],
+    },
+    isExiting: {
+      true: [
+        'animate-out fade-out-0 zoom-out-95',
+        'placement-bottom:slide-out-to-top-2',
+        'placement-left:slide-out-to-right-2',
+        'placement-right:slide-out-to-left-2',
+        'placement-top:slide-out-to-bottom-2',
+      ],
+    },
+  },
+});
+
+export type TooltipProps = TooltipTriggerComponentProps;
+
+export function Tooltip({ delay = 0, ...props }: TooltipProps) {
+  return <TooltipTriggerPrimitive delay={delay} {...props} />;
+}
+
+export type TooltipTriggerProps = React.ComponentProps<typeof Button>;
+
+export function TooltipTrigger({ className, ...props }: TooltipTriggerProps) {
   return (
-    <TooltipPrimitive.Provider
-      data-slot="tooltip-provider"
-      delay={delay}
+    <Button
+      className={cx('cursor-pointer outline-hidden', className)}
+      data-slot="tooltip-trigger"
       {...props}
     />
   );
 }
 
-function Tooltip({ ...props }: TooltipPrimitive.Root.Props) {
-  return (
-    <TooltipProvider>
-      <TooltipPrimitive.Root data-slot="tooltip" {...props} />
-    </TooltipProvider>
-  );
-}
+export type TooltipContentProps = Omit<TooltipPrimitiveProps, 'children'> &
+  VariantProps<typeof tooltipVariants> & {
+    arrow?: boolean;
+    children?: React.ReactNode;
+  };
 
-function TooltipTrigger({ ...props }: TooltipPrimitive.Trigger.Props) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
-}
-
-function TooltipContent({
+export function TooltipContent({
   className,
-  side = 'top',
-  sideOffset = 4,
-  align = 'center',
-  alignOffset = 0,
   children,
+  offset = 8,
+  arrow = true,
+  placement,
   ...props
-}: TooltipPrimitive.Popup.Props &
-  Pick<
-    TooltipPrimitive.Positioner.Props,
-    'align' | 'alignOffset' | 'side' | 'sideOffset'
-  >) {
+}: TooltipContentProps) {
   return (
-    <TooltipPrimitive.Portal>
-      <TooltipPrimitive.Positioner
-        align={align}
-        alignOffset={alignOffset}
-        className="isolate z-50"
-        side={side}
-        sideOffset={sideOffset}
-      >
-        <TooltipPrimitive.Popup
-          className={cn(
-            'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-md px-3 py-1.5 text-xs bg-foreground text-background z-50 w-fit max-w-xs origin-(--transform-origin)',
-            className,
-          )}
-          data-slot="tooltip-content"
-          {...props}
-        >
-          {children}
-          <TooltipPrimitive.Arrow className="size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground z-50 data-[side=bottom]:top-1 data-[side=left]:top-1/2! data-[side=left]:-right-1 data-[side=left]:-translate-y-1/2 data-[side=right]:top-1/2! data-[side=right]:-left-1 data-[side=right]:-translate-y-1/2 data-[side=top]:-bottom-2.5" />
-        </TooltipPrimitive.Popup>
-      </TooltipPrimitive.Positioner>
-    </TooltipPrimitive.Portal>
+    <TooltipPrimitive
+      className={cx(
+        (renderProps) => tooltipVariants({ ...renderProps }),
+        className,
+      )}
+      data-slot="tooltip-content"
+      offset={offset}
+      placement={placement}
+      {...props}
+    >
+      {arrow && (
+        <OverlayArrow className="group">
+          <svg
+            className="block fill-foreground group-placement-bottom:rotate-180 group-placement-left:-rotate-90 group-placement-right:rotate-90"
+            height={8}
+            viewBox="0 0 8 8"
+            width={8}
+          >
+            <path d="M0 0 L4 4 L8 0" />
+          </svg>
+        </OverlayArrow>
+      )}
+      {children}
+    </TooltipPrimitive>
   );
 }
-
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };

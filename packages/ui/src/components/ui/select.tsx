@@ -1,203 +1,298 @@
-import { Select as SelectPrimitive } from '@base-ui/react/select';
+'use client';
+
+import { RiArrowDownSLine, RiCheckLine } from '@remixicon/react';
 import {
-  RiArrowDownSLine,
-  RiArrowUpSLine,
-  RiCheckLine,
-} from '@remixicon/react';
-import * as React from 'react';
+  Button,
+  Collection,
+  Header,
+  ListBox,
+  ListBoxItem as ListBoxItemPrimitive,
+  type ListBoxItemProps,
+  ListBoxSection,
+  type ListBoxSectionProps,
+  Popover,
+  type PopoverProps,
+  Select as SelectPrimitive,
+  type SelectProps as SelectPrimitiveProps,
+  SelectValue as SelectValuePrimitive,
+  Separator,
+  type SeparatorProps,
+  Text,
+  type TextProps,
+} from 'react-aria-components';
+import { tv, type VariantProps } from 'tailwind-variants';
 
-import { cn } from '../../lib/utils';
+import { cn, cx } from '../../lib/utils';
 
-const Select = SelectPrimitive.Root;
+export const selectVariants = tv({
+  base: 'group/select w-full',
+});
 
-function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
+export type SelectProps<T extends object> = SelectPrimitiveProps<T> &
+  VariantProps<typeof selectVariants>;
+
+export function Select<T extends object>({
+  className,
+  ...props
+}: SelectProps<T>) {
   return (
-    <SelectPrimitive.Group
-      className={cn('scroll-my-1 p-1', className)}
-      data-slot="select-group"
+    <SelectPrimitive
+      className={cx(selectVariants(), className)}
+      data-slot="select"
       {...props}
     />
   );
 }
 
-function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
+export const selectTriggerVariants = tv({
+  base: [
+    'flex w-full items-center justify-between gap-2',
+    'rounded-lg border border-input bg-transparent',
+    'px-2.5 py-1.5 text-base/6 sm:text-sm/6',
+    'text-foreground',
+    'cursor-default outline-hidden transition-colors',
+    'hover:enabled:border-muted-foreground/30',
+    'focus:border-ring/70 focus:ring-3 focus:ring-ring/20',
+    'group-open/select:border-ring/70 group-open/select:ring-3 group-open/select:ring-ring/20',
+    'disabled:cursor-not-allowed disabled:opacity-50',
+    'dark:bg-input/30 dark:hover:enabled:bg-input/50',
+    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  ],
+  defaultVariants: {
+    size: 'default',
+  },
+  variants: {
+    size: {
+      default: 'h-8',
+      lg: 'h-9',
+      sm: 'h-7 text-xs',
+    },
+  },
+});
+
+export type SelectTriggerProps = React.ComponentProps<typeof Button> &
+  VariantProps<typeof selectTriggerVariants>;
+
+export function SelectTrigger({
+  className,
+  size,
+  children,
+  ...props
+}: SelectTriggerProps) {
   return (
-    <SelectPrimitive.Value
-      className={cn('flex flex-1 text-left', className)}
+    <Button
+      className={cx(selectTriggerVariants({ size }), className)}
+      data-slot="select-trigger"
+      {...props}
+    >
+      {cx(
+        (_, children) => (
+          <>
+            {children ?? (
+              <SelectValuePrimitive
+                className="flex-1 truncate text-left data-placeholder:text-muted-foreground"
+                data-slot="select-value"
+              />
+            )}
+            <RiArrowDownSLine className="text-muted-foreground size-4 shrink-0" />
+          </>
+        ),
+        children,
+      )}
+    </Button>
+  );
+}
+
+export type SelectValueProps = React.ComponentProps<
+  typeof SelectValuePrimitive
+>;
+
+export function SelectValue({ className, ...props }: SelectValueProps) {
+  return (
+    <SelectValuePrimitive
+      className={cx(
+        'flex-1 truncate text-left data-placeholder:text-muted-foreground',
+        className,
+      )}
       data-slot="select-value"
       {...props}
     />
   );
 }
 
-function SelectTrigger({
+export const selectContentVariants = tv({
+  base: [
+    'bg-popover text-popover-foreground',
+    'ring-foreground/10 ring-1 rounded-lg shadow-md',
+    'min-w-(--trigger-width) max-h-60',
+    'overflow-y-auto overscroll-contain',
+    'entering:animate-in entering:fade-in-0 entering:zoom-in-95',
+    'exiting:animate-out exiting:fade-out-0 exiting:zoom-out-95',
+    'placement-bottom:slide-in-from-top-2',
+    'placement-top:slide-in-from-bottom-2',
+    'placement-left:slide-in-from-right-2',
+    'placement-right:slide-in-from-left-2',
+    'duration-100',
+  ],
+});
+
+export type SelectContentProps<T extends object> = PopoverProps & {
+  items?: Iterable<T>;
+  className?: string;
+  children?: React.ReactNode | ((item: T) => React.ReactNode);
+};
+
+export function SelectContent<T extends object>({
   className,
-  size = 'default',
+  items,
   children,
   ...props
-}: SelectPrimitive.Trigger.Props & {
-  size?: 'sm' | 'default';
-}) {
+}: SelectContentProps<T>) {
   return (
-    <SelectPrimitive.Trigger
-      className={cn(
-        "border-input data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 gap-1.5 rounded-lg border bg-transparent py-2 pr-2 pl-2.5 text-sm transition-colors select-none focus-visible:ring-[3px] aria-invalid:ring-[3px] data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 flex w-fit items-center justify-between whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:items-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        className,
-      )}
-      data-size={size}
-      data-slot="select-trigger"
+    <Popover
+      className={cx(selectContentVariants(), className)}
+      data-slot="select-content"
+      offset={4}
       {...props}
     >
-      {children}
-      <SelectPrimitive.Icon
-        render={
-          <RiArrowDownSLine className="text-muted-foreground size-4 pointer-events-none" />
-        }
-      />
-    </SelectPrimitive.Trigger>
-  );
-}
-
-function SelectContent({
-  className,
-  children,
-  side = 'bottom',
-  sideOffset = 4,
-  align = 'center',
-  alignOffset = 0,
-  alignItemWithTrigger = true,
-  ...props
-}: SelectPrimitive.Popup.Props &
-  Pick<
-    SelectPrimitive.Positioner.Props,
-    'align' | 'alignOffset' | 'side' | 'sideOffset' | 'alignItemWithTrigger'
-  >) {
-  return (
-    <SelectPrimitive.Portal>
-      <SelectPrimitive.Positioner
-        align={align}
-        alignItemWithTrigger={alignItemWithTrigger}
-        alignOffset={alignOffset}
-        className="isolate z-50"
-        side={side}
-        sideOffset={sideOffset}
+      <ListBox
+        className="grid w-full grid-cols-[auto_1fr] gap-y-0.5 p-1 outline-hidden"
+        items={items}
       >
-        <SelectPrimitive.Popup
-          className={cn(
-            'bg-popover text-popover-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 ring-foreground/10 min-w-36 rounded-lg shadow-md ring-1 duration-100 relative isolate z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto',
-            className,
-          )}
-          data-slot="select-content"
-          {...props}
-        >
-          <SelectScrollUpButton />
-          <SelectPrimitive.List>{children}</SelectPrimitive.List>
-          <SelectScrollDownButton />
-        </SelectPrimitive.Popup>
-      </SelectPrimitive.Positioner>
-    </SelectPrimitive.Portal>
+        {children}
+      </ListBox>
+    </Popover>
   );
 }
 
-function SelectLabel({
-  className,
-  ...props
-}: SelectPrimitive.GroupLabel.Props) {
-  return (
-    <SelectPrimitive.GroupLabel
-      className={cn('text-muted-foreground px-1.5 py-1 text-xs', className)}
-      data-slot="select-label"
-      {...props}
-    />
-  );
-}
+export const selectItemVariants = tv({
+  base: [
+    'col-span-full grid grid-cols-subgrid',
+    'relative cursor-default select-none items-center',
+    'rounded-md px-2 py-1.5 text-sm',
+    'outline-hidden',
+    'text-foreground',
+    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+    '*:data-[slot=icon]:mr-2 *:data-[slot=icon]:text-muted-foreground',
+  ],
+  variants: {
+    isDisabled: {
+      true: 'pointer-events-none opacity-50',
+    },
+    isFocused: {
+      true: 'bg-accent text-accent-foreground *:data-[slot=icon]:text-accent-foreground',
+    },
+    isSelected: {
+      true: '*:data-[slot=icon]:text-accent-foreground',
+    },
+  },
+});
 
-function SelectItem({
-  className,
-  children,
-  ...props
-}: SelectPrimitive.Item.Props) {
+export type SelectItemProps = ListBoxItemProps &
+  VariantProps<typeof selectItemVariants>;
+
+export function SelectItem({ className, children, ...props }: SelectItemProps) {
+  const textValue = typeof children === 'string' ? children : undefined;
   return (
-    <SelectPrimitive.Item
-      className={cn(
-        "focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2 relative flex w-full cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+    <ListBoxItemPrimitive
+      className={cx(
+        (renderProps) => selectItemVariants({ ...renderProps }),
         className,
       )}
       data-slot="select-item"
+      textValue={textValue}
       {...props}
     >
-      <SelectPrimitive.ItemText className="flex flex-1 gap-2 shrink-0 whitespace-nowrap">
-        {children}
-      </SelectPrimitive.ItemText>
-      <SelectPrimitive.ItemIndicator
-        render={
-          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
-        }
-      >
-        <RiCheckLine className="pointer-events-none" />
-      </SelectPrimitive.ItemIndicator>
-    </SelectPrimitive.Item>
+      {cx(
+        ({ isSelected }, children) => (
+          <>
+            {isSelected && (
+              <RiCheckLine
+                className="mr-2 size-4 shrink-0"
+                data-slot="check-indicator"
+              />
+            )}
+            {!isSelected && <span className="mr-2 size-4" />}
+            <span className="truncate">
+              {typeof children === 'string' ? children : children}
+            </span>
+          </>
+        ),
+        children,
+      )}
+    </ListBoxItemPrimitive>
   );
 }
 
-function SelectSeparator({
+export const selectSectionVariants = tv({
+  base: 'col-span-full grid grid-cols-[auto_1fr]',
+});
+
+export type SelectSectionProps<T extends object> = ListBoxSectionProps<T> & {
+  title?: string;
+};
+
+export function SelectSection<T extends object>({
   className,
+  title,
+  children,
+  items,
   ...props
-}: SelectPrimitive.Separator.Props) {
+}: SelectSectionProps<T>) {
   return (
-    <SelectPrimitive.Separator
-      className={cn('bg-border -mx-1 my-1 h-px pointer-events-none', className)}
-      data-slot="select-separator"
+    <ListBoxSection
+      className={cn(selectSectionVariants(), className)}
+      data-slot="select-section"
+      {...props}
+    >
+      {title && (
+        <Header className="col-span-full px-2 py-1.5 text-xs font-medium text-muted-foreground">
+          {title}
+        </Header>
+      )}
+      <Collection items={items}>{children}</Collection>
+    </ListBoxSection>
+  );
+}
+
+export type SelectLabelProps = TextProps;
+
+export function SelectLabel({ className, ...props }: SelectLabelProps) {
+  return (
+    <Text
+      className={cn('col-start-2', className)}
+      data-slot="select-label"
+      slot="label"
       {...props}
     />
   );
 }
 
-function SelectScrollUpButton({
+export type SelectDescriptionProps = TextProps;
+
+export function SelectDescription({
   className,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.ScrollUpArrow>) {
+}: SelectDescriptionProps) {
   return (
-    <SelectPrimitive.ScrollUpArrow
-      className={cn(
-        "bg-popover z-10 flex cursor-default items-center justify-center py-1 [&_svg:not([class*='size-'])]:size-4 top-0 w-full",
-        className,
-      )}
-      data-slot="select-scroll-up-button"
+    <Text
+      className={cn('col-start-2 text-sm text-muted-foreground', className)}
+      data-slot="select-description"
+      slot="description"
       {...props}
-    >
-      <RiArrowUpSLine />
-    </SelectPrimitive.ScrollUpArrow>
+    />
   );
 }
 
-function SelectScrollDownButton({
-  className,
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.ScrollDownArrow>) {
+export type SelectSeparatorProps = Omit<SeparatorProps, 'orientation'>;
+
+export function SelectSeparator({ className, ...props }: SelectSeparatorProps) {
   return (
-    <SelectPrimitive.ScrollDownArrow
-      className={cn(
-        "bg-popover z-10 flex cursor-default items-center justify-center py-1 [&_svg:not([class*='size-'])]:size-4 bottom-0 w-full",
-        className,
-      )}
-      data-slot="select-scroll-down-button"
+    <Separator
+      className={cn('col-span-full -mx-1 my-1 h-px bg-border', className)}
+      data-slot="select-separator"
+      orientation="horizontal"
       {...props}
-    >
-      <RiArrowDownSLine />
-    </SelectPrimitive.ScrollDownArrow>
+    />
   );
 }
-
-export {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-};

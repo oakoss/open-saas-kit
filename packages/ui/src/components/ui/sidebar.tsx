@@ -541,9 +541,8 @@ function SidebarMenuButton({
     <Tooltip>
       {comp}
       <TooltipContent
-        align="center"
         hidden={state !== 'collapsed' || isMobile}
-        side="right"
+        placement="right"
         {...tooltip}
       />
     </Tooltip>
