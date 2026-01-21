@@ -1,7 +1,5 @@
 'use client';
 
-import { mergeProps } from '@base-ui/react/merge-props';
-import { useRender } from '@base-ui/react/use-render';
 import { RiSideBarLine } from '@remixicon/react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
@@ -180,7 +178,7 @@ function Sidebar({
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+      <Sheet isOpen={openMobile} onOpenChange={setOpenMobile} {...props}>
         <SheetContent
           className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
           data-mobile="true"
@@ -392,50 +390,36 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<'div'>) {
 
 function SidebarGroupLabel({
   className,
-  render,
   ...props
-}: useRender.ComponentProps<'div'> & React.ComponentProps<'div'>) {
-  return useRender({
-    defaultTagName: 'div',
-    props: mergeProps<'div'>(
-      {
-        className: cn(
-          'text-sidebar-foreground/70 ring-sidebar-ring h-8 rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-2 [&>svg]:size-4 flex shrink-0 items-center outline-hidden [&>svg]:shrink-0',
-          className,
-        ),
-      },
-      props,
-    ),
-    render,
-    state: {
-      slot: 'sidebar-group-label',
-      sidebar: 'group-label',
-    },
-  });
+}: React.ComponentProps<'div'>) {
+  return (
+    <div
+      className={cn(
+        'text-sidebar-foreground/70 ring-sidebar-ring h-8 rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-2 [&>svg]:size-4 flex shrink-0 items-center outline-hidden [&>svg]:shrink-0',
+        className,
+      )}
+      data-sidebar="group-label"
+      data-slot="sidebar-group-label"
+      {...props}
+    />
+  );
 }
 
 function SidebarGroupAction({
   className,
-  render,
   ...props
-}: useRender.ComponentProps<'button'> & React.ComponentProps<'button'>) {
-  return useRender({
-    defaultTagName: 'button',
-    props: mergeProps<'button'>(
-      {
-        className: cn(
-          'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground absolute top-3.5 right-3 w-5 rounded-md p-0 focus-visible:ring-2 [&>svg]:size-4 flex aspect-square items-center justify-center outline-hidden transition-transform [&>svg]:shrink-0 after:absolute after:-inset-2 md:after:hidden group-data-[collapsible=icon]:hidden',
-          className,
-        ),
-      },
-      props,
-    ),
-    render,
-    state: {
-      slot: 'sidebar-group-action',
-      sidebar: 'group-action',
-    },
-  });
+}: React.ComponentProps<'button'>) {
+  return (
+    <button
+      className={cn(
+        'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground absolute top-3.5 right-3 w-5 rounded-md p-0 focus-visible:ring-2 [&>svg]:size-4 flex aspect-square items-center justify-center outline-hidden transition-transform [&>svg]:shrink-0 after:absolute after:-inset-2 md:after:hidden group-data-[collapsible=icon]:hidden',
+        className,
+      )}
+      data-sidebar="group-action"
+      data-slot="sidebar-group-action"
+      {...props}
+    />
+  );
 }
 
 function SidebarGroupContent({
@@ -496,54 +480,61 @@ const sidebarMenuButtonVariants = cva(
   },
 );
 
+type SidebarMenuButtonProps = React.ComponentProps<typeof TooltipTrigger> & {
+  isActive?: boolean;
+  tooltip?: string | React.ComponentProps<typeof TooltipContent>;
+} & VariantProps<typeof sidebarMenuButtonVariants>;
+
 function SidebarMenuButton({
-  render,
   isActive = false,
   variant = 'default',
   size = 'default',
   tooltip,
   className,
+  children,
   ...props
-}: useRender.ComponentProps<'button'> &
-  React.ComponentProps<'button'> & {
-    isActive?: boolean;
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>;
-  } & VariantProps<typeof sidebarMenuButtonVariants>) {
+}: SidebarMenuButtonProps) {
   const { isMobile, state } = useSidebar();
-  const comp = useRender({
-    defaultTagName: 'button',
-    props: mergeProps<'button'>(
-      {
-        className: cn(sidebarMenuButtonVariants({ variant, size }), className),
-      },
-      props,
-    ),
-    render: tooltip ? TooltipTrigger : render,
-    state: {
-      active: isActive,
-      sidebar: 'menu-button',
-      size,
-      slot: 'sidebar-menu-button',
-    },
-  });
+
+  const buttonClassName = cn(
+    sidebarMenuButtonVariants({ size, variant }),
+    className,
+  );
 
   if (!tooltip) {
-    return comp;
+    return (
+      <TooltipTrigger
+        className={buttonClassName}
+        data-active={isActive || undefined}
+        data-sidebar="menu-button"
+        data-size={size}
+        data-slot="sidebar-menu-button"
+        {...props}
+      >
+        {children}
+      </TooltipTrigger>
+    );
   }
 
-  if (typeof tooltip === 'string') {
-    tooltip = {
-      children: tooltip,
-    };
-  }
+  const tooltipProps =
+    typeof tooltip === 'string' ? { children: tooltip } : tooltip;
 
   return (
     <Tooltip>
-      {comp}
+      <TooltipTrigger
+        className={buttonClassName}
+        data-active={isActive || undefined}
+        data-sidebar="menu-button"
+        data-size={size}
+        data-slot="sidebar-menu-button"
+        {...props}
+      >
+        {children}
+      </TooltipTrigger>
       <TooltipContent
         hidden={state !== 'collapsed' || isMobile}
         placement="right"
-        {...tooltip}
+        {...tooltipProps}
       />
     </Tooltip>
   );
@@ -551,32 +542,24 @@ function SidebarMenuButton({
 
 function SidebarMenuAction({
   className,
-  render,
   showOnHover = false,
   ...props
-}: useRender.ComponentProps<'button'> &
-  React.ComponentProps<'button'> & {
-    showOnHover?: boolean;
-  }) {
-  return useRender({
-    defaultTagName: 'button',
-    props: mergeProps<'button'>(
-      {
-        className: cn(
-          'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground peer-hover/menu-button:text-sidebar-accent-foreground absolute top-1.5 right-1 aspect-square w-5 rounded-md p-0 peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 focus-visible:ring-2 [&>svg]:size-4 flex items-center justify-center outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 md:after:hidden [&>svg]:shrink-0',
-          showOnHover &&
-            'peer-data-active/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-open:opacity-100 md:opacity-0',
-          className,
-        ),
-      },
-      props,
-    ),
-    render,
-    state: {
-      slot: 'sidebar-menu-action',
-      sidebar: 'menu-action',
-    },
-  });
+}: React.ComponentProps<'button'> & {
+  showOnHover?: boolean;
+}) {
+  return (
+    <button
+      className={cn(
+        'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground peer-hover/menu-button:text-sidebar-accent-foreground absolute top-1.5 right-1 aspect-square w-5 rounded-md p-0 peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 focus-visible:ring-2 [&>svg]:size-4 flex items-center justify-center outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 md:after:hidden [&>svg]:shrink-0',
+        showOnHover &&
+          'peer-data-active/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-open:opacity-100 md:opacity-0',
+        className,
+      )}
+      data-sidebar="menu-action"
+      data-slot="sidebar-menu-action"
+      {...props}
+    />
+  );
 }
 
 function SidebarMenuBadge({
@@ -663,35 +646,30 @@ function SidebarMenuSubItem({
 }
 
 function SidebarMenuSubButton({
-  render,
   size = 'md',
   isActive = false,
   className,
+  children,
   ...props
-}: useRender.ComponentProps<'a'> &
-  React.ComponentProps<'a'> & {
-    size?: 'sm' | 'md';
-    isActive?: boolean;
-  }) {
-  return useRender({
-    defaultTagName: 'a',
-    props: mergeProps<'a'>(
-      {
-        className: cn(
-          'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>svg]:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground h-7 gap-2 rounded-md px-2 focus-visible:ring-2 data-[size=md]:text-sm data-[size=sm]:text-xs [&>svg]:size-4 flex min-w-0 -translate-x-px items-center overflow-hidden outline-hidden group-data-[collapsible=icon]:hidden disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:shrink-0',
-          className,
-        ),
-      },
-      props,
-    ),
-    render,
-    state: {
-      active: isActive,
-      sidebar: 'menu-sub-button',
-      size,
-      slot: 'sidebar-menu-sub-button',
-    },
-  });
+}: React.ComponentProps<'a'> & {
+  size?: 'sm' | 'md';
+  isActive?: boolean;
+}) {
+  return (
+    <a
+      className={cn(
+        'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>svg]:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground h-7 gap-2 rounded-md px-2 focus-visible:ring-2 data-[size=md]:text-sm data-[size=sm]:text-xs [&>svg]:size-4 flex min-w-0 -translate-x-px items-center overflow-hidden outline-hidden group-data-[collapsible=icon]:hidden disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:shrink-0',
+        className,
+      )}
+      data-active={isActive || undefined}
+      data-sidebar="menu-sub-button"
+      data-size={size}
+      data-slot="sidebar-menu-sub-button"
+      {...props}
+    >
+      {children}
+    </a>
+  );
 }
 
 export {

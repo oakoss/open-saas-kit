@@ -1,53 +1,71 @@
 'use client';
 
-import { ScrollArea as ScrollAreaPrimitive } from '@base-ui/react/scroll-area';
+import * as React from 'react';
 
 import { cn } from '../../lib/utils';
+
+type ScrollAreaProps = React.ComponentProps<'div'> & {
+  orientation?: 'vertical' | 'horizontal' | 'both';
+};
 
 function ScrollArea({
   className,
   children,
+  orientation = 'vertical',
   ...props
-}: ScrollAreaPrimitive.Root.Props) {
+}: ScrollAreaProps) {
   return (
-    <ScrollAreaPrimitive.Root
+    <div
       className={cn('relative', className)}
       data-slot="scroll-area"
       {...props}
     >
-      <ScrollAreaPrimitive.Viewport
-        className="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1"
+      <div
+        className={cn(
+          'size-full rounded-[inherit] outline-none',
+          // Custom scrollbar styling
+          '[&::-webkit-scrollbar]:size-2.5',
+          '[&::-webkit-scrollbar-track]:bg-transparent',
+          '[&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border',
+          '[&::-webkit-scrollbar-corner]:bg-transparent',
+          // Firefox scrollbar styling
+          'scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border',
+          // Overflow based on orientation
+          orientation === 'vertical' && 'overflow-y-auto overflow-x-hidden',
+          orientation === 'horizontal' && 'overflow-x-auto overflow-y-hidden',
+          orientation === 'both' && 'overflow-auto',
+        )}
         data-slot="scroll-area-viewport"
       >
         {children}
-      </ScrollAreaPrimitive.Viewport>
-      <ScrollBar />
-      <ScrollAreaPrimitive.Corner />
-    </ScrollAreaPrimitive.Root>
+      </div>
+    </div>
   );
 }
+
+type ScrollBarProps = React.ComponentProps<'div'> & {
+  orientation?: 'vertical' | 'horizontal';
+};
 
 function ScrollBar({
   className,
   orientation = 'vertical',
   ...props
-}: ScrollAreaPrimitive.Scrollbar.Props) {
+}: ScrollBarProps) {
   return (
-    <ScrollAreaPrimitive.Scrollbar
+    <div
       className={cn(
-        'data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent flex touch-none p-px transition-colors select-none',
+        'pointer-events-none absolute',
+        orientation === 'horizontal' &&
+          'bottom-0 left-0 right-0 h-2.5 border-t border-t-transparent',
+        orientation === 'vertical' &&
+          'top-0 right-0 bottom-0 w-2.5 border-l border-l-transparent',
         className,
       )}
       data-orientation={orientation}
       data-slot="scroll-area-scrollbar"
-      orientation={orientation}
       {...props}
-    >
-      <ScrollAreaPrimitive.Thumb
-        className="rounded-full bg-border relative flex-1"
-        data-slot="scroll-area-thumb"
-      />
-    </ScrollAreaPrimitive.Scrollbar>
+    />
   );
 }
 
