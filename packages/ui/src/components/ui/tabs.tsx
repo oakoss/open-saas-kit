@@ -15,17 +15,17 @@ import { tv, type VariantProps } from 'tailwind-variants';
 import { cx } from '../../lib/utils';
 
 export const tabsVariants = tv({
-  base: 'gap-2 group/tabs flex data-[orientation=horizontal]:flex-col',
+  base: 'gap-2 group/tabs flex orientation-horizontal:flex-col',
 });
 
 export const tabsListVariants = tv({
   base: [
-    'rounded-lg p-[3px]',
+    'rounded-lg p-0.75',
     'group-data-horizontal/tabs:h-8',
     'group/tabs-list text-muted-foreground',
     'inline-flex w-fit items-center justify-center',
-    'group-data-[orientation=vertical]/tabs:h-fit',
-    'group-data-[orientation=vertical]/tabs:flex-col',
+    'group-orientation-vertical/tabs:h-fit',
+    'group-orientation-vertical/tabs:flex-col',
   ],
   defaultVariants: {
     variant: 'default',
@@ -47,7 +47,7 @@ export const tabsTriggerVariants = tv({
     'dark:text-muted-foreground dark:hover:text-foreground',
     'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-ring focus-visible:outline-1',
     'disabled:pointer-events-none disabled:opacity-50',
-    'group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start',
+    'group-orientation-vertical/tabs:w-full group-orientation-vertical/tabs:justify-start',
     "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
     // Selected state
     'selected:bg-background selected:text-foreground',
@@ -61,12 +61,12 @@ export const tabsTriggerVariants = tv({
     'dark:group-data-[variant=line]/tabs-list:selected:bg-transparent',
     // Line indicator (after pseudo-element)
     'after:bg-foreground after:absolute after:opacity-0 after:transition-opacity',
-    'group-data-[orientation=horizontal]/tabs:after:inset-x-0',
-    'group-data-[orientation=horizontal]/tabs:after:-bottom-1.25',
-    'group-data-[orientation=horizontal]/tabs:after:h-0.5',
-    'group-data-[orientation=vertical]/tabs:after:inset-y-0',
-    'group-data-[orientation=vertical]/tabs:after:-right-1',
-    'group-data-[orientation=vertical]/tabs:after:w-0.5',
+    'group-orientation-horizontal/tabs:after:inset-x-0',
+    'group-orientation-horizontal/tabs:after:-bottom-1.25',
+    'group-orientation-horizontal/tabs:after:h-0.5',
+    'group-orientation-vertical/tabs:after:inset-y-0',
+    'group-orientation-vertical/tabs:after:-right-1',
+    'group-orientation-vertical/tabs:after:w-0.5',
     'group-data-[variant=line]/tabs-list:selected:after:opacity-100',
   ],
 });

@@ -41,7 +41,7 @@ function ToggleGroup({
     >
       <ToggleGroupPrimitive
         className={cn(
-          'rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
+          'rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] orientation-vertical:flex-col orientation-vertical:items-stretch',
           className,
         )}
         data-orientation={orientation}

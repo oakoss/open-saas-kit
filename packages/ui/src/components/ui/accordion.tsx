@@ -53,11 +53,11 @@ function AccordionTrigger({ className, children }: AccordionTriggerProps) {
       >
         {children}
         <RiArrowDownSLine
-          className="pointer-events-none shrink-0 group-data-[expanded]/accordion-item:hidden"
+          className="pointer-events-none shrink-0 group-data-expanded/accordion-item:hidden"
           data-slot="accordion-trigger-icon"
         />
         <RiArrowUpSLine
-          className="pointer-events-none hidden shrink-0 group-data-[expanded]/accordion-item:inline"
+          className="pointer-events-none hidden shrink-0 group-data-expanded/accordion-item:inline"
           data-slot="accordion-trigger-icon"
         />
       </Button>
@@ -72,7 +72,7 @@ function AccordionContent({
 }: DisclosurePanelProps) {
   return (
     <DisclosurePanelPrimitive
-      className="data-[expanded]:animate-accordion-down text-sm overflow-hidden"
+      className="data-expanded:animate-accordion-down text-sm overflow-hidden"
       data-slot="accordion-content"
       {...props}
     >

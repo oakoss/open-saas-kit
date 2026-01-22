@@ -108,7 +108,7 @@ function NavigationMenuTrigger({
           {showArrow && (
             <RiArrowDownSLine
               aria-hidden="true"
-              className="relative top-px ml-1 size-3 transition duration-300 group-data-[open]:rotate-180"
+              className="relative top-px ml-1 size-3 transition duration-300 group-data-open:rotate-180"
             />
           )}
         </>

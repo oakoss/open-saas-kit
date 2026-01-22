@@ -15,6 +15,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
+      closeButton
+      richColors
       className="toaster group"
       icons={{
         error: <RiCloseCircleLine className="size-4" />,
