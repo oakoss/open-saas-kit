@@ -45,7 +45,7 @@
     "@vitejs/plugin-react": "^5.1.2",
     "eslint": "^9.39.2",
     "jsdom": "^27.4.0",
-    "nitro": "npm:nitro-nightly@3.0.1-20260119-145349-d0c4950f",
+    "nitro": "npm:nitro-nightly@3.0.1-alpha.2",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^6.0.4",
