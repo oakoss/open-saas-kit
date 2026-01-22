@@ -60,6 +60,7 @@
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@vitest/browser-playwright": "^4.0.17",
+    "@vitest/coverage-istanbul": "^4.0.17",
     "@vitest/coverage-v8": "^4.0.17",
     "eslint": "^9.39.2",
     "eslint-plugin-storybook": "^10.2.0",
