@@ -2,6 +2,11 @@ name: Chromatic
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/ui/**'
   pull_request:
     paths:
       - 'packages/ui/**'

@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "tsdown",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build --stats-json",
     "clean": "rm -rf node_modules dist coverage",
     "dev": "tsdown --watch './src/**/*'",
     "lint": "eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
