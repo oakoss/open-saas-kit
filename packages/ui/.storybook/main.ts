@@ -1,18 +1,33 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+/**
+ * Resolves the absolute path of a package in monorepo environments.
+ * Required for pnpm workspaces and Yarn PnP.
+ */
+const getAbsolutePath = (packageName: string) =>
+  dirname(fileURLToPath(import.meta.resolve(`${packageName}/package.json`)));
+
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    '@storybook/addon-docs',
-    '@storybook/addon-a11y',
-    '@chromatic-com/storybook',
+    getAbsolutePath('@storybook/addon-docs'),
+    getAbsolutePath('@storybook/addon-a11y'),
+    getAbsolutePath('@chromatic-com/storybook'),
   ],
-  framework: '@storybook/react-vite',
+  framework: {
+    name: getAbsolutePath('@storybook/react-vite') as '@storybook/react-vite',
+    options: {},
+  },
   core: {
     disableTelemetry: true,
   },
   typescript: {
-    reactDocgen: 'react-docgen-typescript',
+    // Use react-docgen for better monorepo support (react-docgen-typescript has issues)
+    reactDocgen: 'react-docgen',
+    check: false,
   },
 };
 
