@@ -6,5 +6,10 @@
     "outDir": "node_modules/.cache/typescript/lint",
     "tsBuildInfoFile": "node_modules/.cache/typescript/lint/.tsbuildinfo"
   },
-  "include": [".storybook", "tsdown.config.ts"]
+  "include": [
+    ".storybook",
+    "tsdown.config.ts",
+    "vitest.config.ts",
+    "vitest.shims.d.ts"
+  ]
 }

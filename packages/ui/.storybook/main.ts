@@ -1,5 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
+import tailwindcss from '@tailwindcss/vite';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -16,18 +17,22 @@ const config: StorybookConfig = {
     getAbsolutePath('@storybook/addon-docs'),
     getAbsolutePath('@storybook/addon-a11y'),
     getAbsolutePath('@chromatic-com/storybook'),
+    getAbsolutePath('@storybook/addon-vitest'),
   ],
   framework: {
-    name: getAbsolutePath('@storybook/react-vite') as '@storybook/react-vite',
+    name: getAbsolutePath('@storybook/react-vite'),
     options: {},
   },
   core: {
     disableTelemetry: true,
   },
   typescript: {
-    // Use react-docgen for better monorepo support (react-docgen-typescript has issues)
     reactDocgen: 'react-docgen',
-    check: false,
+  },
+  viteFinal(config) {
+    config.plugins = config.plugins ?? [];
+    config.plugins.push(tailwindcss());
+    return config;
   },
 };
 
