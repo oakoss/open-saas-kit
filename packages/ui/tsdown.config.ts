@@ -4,13 +4,13 @@ import { defineConfig } from 'tsdown';
 export default defineConfig({
   dts: true,
   entry: ['./src/index.ts', './src/styles/theme.css'],
+  exclude: ['**/*.stories.tsx', '**/*.stories.ts', '.storybook/**'],
   external: [
     'react',
     'react-dom',
     'react/jsx-runtime',
     // Peer dependencies that consumers will provide
     'react-aria-components',
-    '@base-ui/react',
     'recharts',
     'sonner',
     'vaul',

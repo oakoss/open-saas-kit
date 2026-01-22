@@ -16,10 +16,12 @@
   },
   "scripts": {
     "build": "tsdown",
+    "build-storybook": "storybook build",
     "clean": "rm -rf node_modules dist",
     "dev": "tsdown --watch './src/**/*'",
     "lint": "eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "lint:fix": "eslint . --fix --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
+    "storybook": "storybook dev -p 6006",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -43,13 +45,19 @@
   },
   "devDependencies": {
     "@bosh-code/tsdown-plugin-tailwindcss": "^1.0.1",
+    "@chromatic-com/storybook": "^5.0.0",
     "@oakoss/eslint-config": "workspace:^",
     "@oakoss/typescript-config": "workspace:^",
+    "@storybook/addon-a11y": "^10.2.0",
+    "@storybook/addon-docs": "^10.2.0",
+    "@storybook/react-vite": "^10.2.0",
     "@types/node": "^25.0.10",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.2",
+    "eslint-plugin-storybook": "^10.2.0",
     "shadcn": "^3.7.0",
+    "storybook": "^10.2.0",
     "tailwindcss": "^4.1.18",
     "tailwindcss-react-aria-components": "^2.0.1",
     "tsdown": "0.20.0-beta.4",

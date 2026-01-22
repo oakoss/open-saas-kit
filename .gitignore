@@ -54,3 +54,6 @@ yarn-error.log*
 
 # Misc
 *.local
+
+*storybook.log
+storybook-static
