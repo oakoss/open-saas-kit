@@ -32,6 +32,8 @@ jobs:
     name: Test
     needs: static-checks
     runs-on: ubuntu-latest
+    env:
+      SB_URL: https://${{ github.head_ref || github.ref_name }}--${{ vars.CHROMATIC_APP_ID }}.chromatic.com
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6

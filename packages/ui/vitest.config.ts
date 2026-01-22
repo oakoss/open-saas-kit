@@ -10,11 +10,12 @@ const dirname =
     ? path.dirname(fileURLToPath(import.meta.url))
     : __dirname;
 
-// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
+// More info at: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
 export default defineConfig({
   test: {
     coverage: {
       exclude: [
+        '**/*.stories.{ts,tsx}',
         '**/*.test.{ts,tsx}',
         '**/*.spec.{ts,tsx}',
         '**/index.ts',
@@ -29,9 +30,10 @@ export default defineConfig({
       {
         extends: true,
         plugins: [
-          // The plugin will run tests for the stories defined in your Storybook config
-          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-          storybookTest({ configDir: path.join(dirname, '.storybook') }),
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+            storybookUrl: process.env.SB_URL ?? 'http://localhost:6006',
+          }),
         ],
         test: {
           browser: {
