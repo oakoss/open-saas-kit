@@ -57,7 +57,11 @@
     {
       "description": "Storybook ecosystem",
       "groupName": "Storybook",
-      "matchPackageNames": ["/^@storybook//", "/^storybook/", "/^@chromatic-com//"]
+      "matchPackageNames": [
+        "/^@storybook//",
+        "/^storybook/",
+        "/^@chromatic-com//"
+      ]
     },
     {
       "description": "Testing libraries",
@@ -67,7 +71,11 @@
     {
       "description": "ESLint ecosystem",
       "groupName": "ESLint",
-      "matchPackageNames": ["/^eslint/", "/^@eslint//", "/^@typescript-eslint//"]
+      "matchPackageNames": [
+        "/^eslint/",
+        "/^@eslint//",
+        "/^@typescript-eslint//"
+      ]
     },
     {
       "description": "Commitlint ecosystem",
