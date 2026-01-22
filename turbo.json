@@ -9,6 +9,7 @@
     "GOOGLE_CLIENT_SECRET",
     "NODE_ENV",
     "PROD",
+    "SB_URL",
     "SESSION_SECRET",
     "SKIP_ENV_VALIDATION",
     "VITE_APP_URL"
