@@ -33,6 +33,7 @@ out
 
 # Testing
 coverage
+__screenshots__
 
 # Debug logs
 npm-debug.log*
