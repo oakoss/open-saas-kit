@@ -36,7 +36,7 @@
     "eslint": "^9.39.2",
     "lefthook": "^2.0.15",
     "markdownlint-cli2": "^0.20.0",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.1",
     "prettier-plugin-packagejson": "^3.0.0",
     "sherif": "^1.10.0",
     "turbo": "^2.7.5",

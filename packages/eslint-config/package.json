@@ -19,7 +19,7 @@
     "@oakoss/typescript-config": "workspace:^",
     "@tanstack/eslint-plugin-query": "^5.91.3",
     "@tanstack/eslint-plugin-router": "^1.141.0",
-    "@types/node": "^25.0.9",
+    "@types/node": "^25.0.10",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-better-tailwindcss": "^4.0.1",
