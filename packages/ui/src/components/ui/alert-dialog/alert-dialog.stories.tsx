@@ -23,6 +23,18 @@ const meta = {
   },
   component: AlertDialog,
   parameters: {
+    a11y: {
+      // Axe can't compute background through overlapping overlay elements.
+      // Exclude modal content from color-contrast check (actual contrast is correct).
+      config: {
+        rules: [
+          {
+            id: 'color-contrast',
+            selector: '*:not([data-slot="alert-dialog-overlay"] *)',
+          },
+        ],
+      },
+    },
     layout: 'centered',
   },
   tags: ['autodocs'],
