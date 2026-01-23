@@ -46,7 +46,7 @@ export type ToastOptions = {
 
 const toastVariants = tv({
   base: [
-    'group/toast flex w-full items-center gap-3 rounded-lg border p-4 shadow-lg',
+    'group/toast flex min-w-72 items-center gap-3 rounded-lg border p-4 shadow-lg',
     'entering:animate-in entering:slide-in-from-bottom-full entering:fade-in-0 entering:duration-300',
     'exiting:animate-out exiting:slide-out-to-right-full exiting:fade-out-0 exiting:duration-200',
   ],
@@ -149,7 +149,7 @@ const toastCloseVariants = tv({
 });
 
 const toastActionVariants = tv({
-  base: 'mt-2 inline-flex h-8 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors',
+  base: 'mt-2 inline-flex h-8 items-center justify-center self-start rounded-md px-3 text-sm font-medium transition-colors',
   variants: {
     variant: {
       default:
