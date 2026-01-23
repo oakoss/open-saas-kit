@@ -8,7 +8,7 @@ pre-commit:
   parallel: true
   commands:
     bd-flush:
-      run: bd hooks run pre-commit
+      run: TERM=dumb bd hooks run pre-commit --quiet
       skip:
         - run: '[ ! -d .beads ]'
     typecheck:
@@ -30,21 +30,21 @@ pre-commit:
 post-merge:
   commands:
     bd-import:
-      run: bd hooks run post-merge
+      run: TERM=dumb bd hooks run post-merge --quiet
       skip:
         - run: '[ ! -d .beads ]'
 
 post-checkout:
   commands:
     bd-import:
-      run: bd hooks run post-checkout {1} {2} {3}
+      run: TERM=dumb bd hooks run post-checkout {1} {2} {3} --quiet
       skip:
         - run: '[ ! -d .beads ]'
 
 pre-push:
   commands:
     bd-sync:
-      run: bd hooks run pre-push
+      run: TERM=dumb bd hooks run pre-push --quiet
       skip:
         - run: '[ ! -d .beads ]'
 
