@@ -6,6 +6,10 @@ output:
 pre-commit:
   parallel: true
   commands:
+    bd-flush:
+      run: bd hooks run pre-commit
+      skip:
+        - run: '[ ! -d .beads ]'
     typecheck:
       glob: '*.{ts,tsx}'
       run: pnpm typecheck
@@ -21,6 +25,27 @@ pre-commit:
       glob: '*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,yml,yaml}'
       run: pnpm prettier -uwl {staged_files}
       stage_fixed: true # Auto-stage Prettier fixes!
+
+post-merge:
+  commands:
+    bd-import:
+      run: bd hooks run post-merge
+      skip:
+        - run: '[ ! -d .beads ]'
+
+post-checkout:
+  commands:
+    bd-import:
+      run: bd hooks run post-checkout {1} {2} {3}
+      skip:
+        - run: '[ ! -d .beads ]'
+
+pre-push:
+  commands:
+    bd-sync:
+      run: bd hooks run pre-push
+      skip:
+        - run: '[ ! -d .beads ]'
 
 commit-msg:
   commands:
